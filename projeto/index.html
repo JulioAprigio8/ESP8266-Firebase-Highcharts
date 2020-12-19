@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <meta charset="utf-8" />
+  <title>Gráficos</title>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+
+  <body>
+    <h2>Gráficos</h2>
+    <div id="chart" class="container"></div>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+
+    <script>
+      let chart;
+      var config = {
+        apiKey: "AIzaSyAWds87SYdvp2NnbI908TwdiI6xEyNqMps",
+        authDomain: "grafico-apoo.firebaseapp.com",
+        databaseURL: "https://grafico-apoo.firebaseio.com",
+        projectId: "grafico-apoo",
+        storageBucket: "grafico-apoo.appspot.com",
+        messagingSenderId: "72699933373",
+        appId: "1:72699933373:web:3220c8f563b63cccc23dd4",
+        measurementId: "G-VGME3K07X1"
+      };
+
+      firebase.initializeApp(config);
+
+      var db = firebase.database();
+      
+      window.addEventListener('load',function(){
+        chart = new Highcharts.Chart({
+          //Estrutura responsavel por determinar os dados do gráfico
+          chart: { renderTo: "chart" },
+          title: { text: "Gráfico 01" },
+         events:{
+            load: requestFB()
+          },
+          series: [
+            {
+              showInLegend: true,
+              name: 'ESP',
+              data: [0,1]//parte responsavel por plotar pontos(manualmente)dos dados
+            }
+          ],
+          plotOptions: {
+            line: {
+              animation: true,
+              dataLabels: { enabled: true }
+            },
+            series: { color: "#059e8a" }
+          },
+          xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { second: "%H:%M:%S" }
+          },
+          yAxis: {
+            title: { text: "Umidade (%)" },
+          },
+          credits: { enabled: false }
+        })
+      }); 
+      async function requestFB(){
+      db.ref("teste").limitToLast(1).on("value", snapshot => {   
+        var EIXO_X = new Date(); 
+        snapshot.forEach(childSnapshot => {
+          if(chart.series[0].data.length > 10){//exibe 10 pontos na area do grafico
+            chart.series[0].addPoint([EIXO_X,childSnapshot.val()],true,true);
+          }else{
+            chart.series[0].addPoint([EIXO_X,childSnapshot.val()],true,false)//apaga o ponto mais antigo do gráfico
+          }
+        });    
+        })
+      };
+    </script>
+  </body>
+</html>
