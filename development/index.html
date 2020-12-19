@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<meta charset="utf-8" />
+<title>Gráficos</title>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+
+<body>
+  <a id="btn-lamp"> 
+    <button>ON/OFF</button>
+  </a>
+  
+  <h2>Gráficos</h2>
+  <div id="chart" class="container"></div>
+  <div id="bar1" class="container"></div>
+  <div id="bar2" class="container"></div>
+  <div id="pizza" class="container"></div>
+
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+
+  <script>
+    let chart;
+    var config = {
+      apiKey: "AIzaSyAWds87SYdvp2NnbI908TwdiI6xEyNqMps",
+      authDomain: "grafico-apoo.firebaseapp.com",
+      databaseURL: "https://grafico-apoo.firebaseio.com",
+      projectId: "grafico-apoo",
+      storageBucket: "grafico-apoo.appspot.com",
+      messagingSenderId: "72699933373",
+      appId: "1:72699933373:web:3220c8f563b63cccc23dd4",
+      measurementId: "G-VGME3K07X1"
+    };
+
+    firebase.initializeApp(config);
+
+    var db = firebase.database();
+
+    window.addEventListener('load', function () {
+      
+      chart = new Highcharts.Chart({
+        //Estrutura responsavel por determinar os dados do gráfico
+        chart: { renderTo: "chart" },
+        title: { text: "Gráfico 01" },
+        events: {
+          load: requestFB()
+        },
+        series: [
+          {
+            color: "#059e8a",
+            showInLegend: true,
+            name: 'Umidade do Solo',
+            data: [0, 1]//parte responsavel por plotar pontos(manualmente)dos dados
+          },
+          {
+            color: "#9B111E",
+            showInLegend:true,
+            name: 'Temperatura do Ar',
+            data: [0,1]
+          }
+        ],
+        plotOptions: {
+          line: {
+            animation: true,
+            dataLabels: { enabled: true }
+          },
+        },
+        xAxis: {
+          type: 'datetime',
+          dateTimeLabelFormats: { second: "%H:%M:%S" }
+        },
+        yAxis: {
+          title: { text: "Umidade(%) e Temperatura(°C)" },
+        },
+        credits: { enabled: false }
+      })
+
+      bar1 = new Highcharts.Chart({
+        //Estrutura responsavel por determinar os dados do gráfico
+        chart: {
+          type: 'column',
+          renderTo: "bar1",
+        },
+        title: { text: "Gráfico 02" },
+        events: {
+          load: requestFB1()
+        },
+        series: [
+        {
+            color: "#059e8a",
+            showInLegend: true,
+            name: 'Umidade do Solo',
+            data: [0, 1]//parte responsavel por plotar pontos(manualmente)dos dados
+          },
+          {
+            color: "#9B111E",
+            showInLegend:true,
+            name: 'Temperatura do Ar',
+            data: [0,1]
+          }
+        ],
+        plotOptions: {
+          bar: {
+            animation: true,
+            dataLabels: { enabled: true }
+          },
+        },
+        xAxis: {
+          type: 'datetime',
+          dateTimeLabelFormats: { second: "%H:%M:%S" }
+        },
+        yAxis: {
+          title: { text: "Umidade(%) e Temperatura(°C)" },
+        },
+        credits: { enabled: false }
+      })
+
+      bar2 = new Highcharts.Chart({
+        //Estrutura responsavel por determinar os dados do gráfico
+        chart: {
+          type: 'bar',
+          renderTo: "bar2",
+        },
+        title: { text: "Gráfico 03" },
+        events: {
+          load: requestFB2()
+        },
+        series: [
+        {
+            color: "#059e8a",
+            showInLegend: true,
+            name: 'Umidade do Solo',
+            data: [0, 1]//parte responsavel por plotar pontos(manualmente)dos dados
+          },
+          {
+            color: "#9B111E",
+            showInLegend:true,
+            name: 'Temperatura do Ar',
+            data: [0,1]
+          }
+        ],
+        plotOptions: {
+          bar: {
+            animation: true,
+            dataLabels: { enabled: true }
+          },
+        },
+        xAxis: {
+          type: 'datetime',
+          dateTimeLabelFormats: { second: "%H:%M:%S" }
+        },
+        yAxis: {
+          title: { text: "Umidade(%) e Temperatura(°C)" },
+        },
+        credits: { enabled: false }
+      })
+      pizza = new Highcharts.Chart({
+        //Estrutura responsavel por determinar os dados do gráfico
+        chart: {
+          type: 'pie',
+          renderTo: "pizza",
+        },
+        title: { text: "Gráfico 04" },
+        events: {
+          load: requestFB3()
+        },
+        series: [
+        {
+            color: "#059e8a",
+            showInLegend: true,
+            name: 'Umidade do Solo',
+            data: [0, 1]//parte responsavel por plotar pontos(manualmente)dos dados
+          },
+          {
+            color: "#9B111E",
+            showInLegend:true,
+            name: 'Temperatura do Ar',
+            data: [0,1]
+          }
+        ],
+        plotOptions: {
+          pie: {
+            animation: true,
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: { enabled: true }
+          },
+        },
+        xAxis: {
+          type: 'datetime',
+          dateTimeLabelFormats: { second: "%H:%M:%S" }
+        },
+        yAxis: {
+          title: { text: "Umidade(%) e Temperatura(°C)" },
+        },
+        credits: { enabled: false }
+      })
+    });
+    async function requestFB() {
+      db.ref("teste/solo").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (chart.series[0].data.length > 10) {//exibe 10 pontos na area do grafico
+            chart.series[0].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            chart.series[0].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+      db.ref("teste/temp").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (chart.series[1].data.length > 10) {//exibe 10 pontos na area do grafico
+            chart.series[1].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            chart.series[1].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+    };
+    async function requestFB1() {
+      db.ref("teste/solo").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (bar1.series[0].data.length > 10) {//exibe 10 pontos na area do grafico
+            bar1.series[0].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            bar1.series[0].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+      db.ref("teste/temp").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (bar1.series[1].data.length > 10) {//exibe 10 pontos na area do grafico
+            bar1.series[1].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            bar1.series[1].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+    };
+    async function requestFB2() {
+      db.ref("teste/solo").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (bar2.series[0].data.length > 10) {//exibe 10 pontos na area do grafico
+            bar2.series[0].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            bar2.series[0].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+      db.ref("teste/temp").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (bar2.series[1].data.length > 10) {//exibe 10 pontos na area do grafico
+            bar2.series[1].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            bar2.series[1].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+    };
+    async function requestFB3() {
+      db.ref("teste/solo").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (pizza.series[0].data.length > 10) {//exibe 10 pontos na area do grafico
+            pizza.series[0].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            pizza.series[0].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+      db.ref("teste/temp").limitToLast(1).on("value", snapshot => {
+        var EIXO_X = new Date();
+        snapshot.forEach(childSnapshot => {
+          if (pizza.series[1].data.length > 10) {//exibe 10 pontos na area do grafico
+            pizza.series[1].addPoint([EIXO_X, childSnapshot.val()], true, true);
+          } else {
+            pizza.series[1].addPoint([EIXO_X, childSnapshot.val()], true, false)//apaga o ponto mais antigo do gráfico
+          }
+        });
+      })
+    };
+  </script>
+  
+</body>
+
+</html>
