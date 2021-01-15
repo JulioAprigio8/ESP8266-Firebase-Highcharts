@@ -1,6 +1,0 @@
-https://www.google.com/intl/pt-BR_br/earth/outreach/learn/mapping-from-a-google-spreadsheet/
-
-https://developers.google.com/maps/documentation/javascript/examples/polyline-simple#all
-
-https://developers.google.com/maps/documentation/javascript/how-tos
-
